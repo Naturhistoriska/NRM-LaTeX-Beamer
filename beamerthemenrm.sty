@@ -1,0 +1,116 @@
+\mode<presentation>
+
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+
+% FONT
+% "At NRM we use Scala". Here we emulate by using Source Sans Pro:
+% sudo apt install texlive-fonts-extra
+\usepackage[default]{sourcesanspro}
+\usepackage[T1]{fontenc}
+
+% COMMANDS
+\newcommand\extra[1]{\renewcommand\@extra{#1}}
+\newcommand\@extra{}
+
+\newcommand\footline[1]{\renewcommand\@footline{#1}}
+\newcommand\@footline{}
+
+% COLOR
+\definecolor{nrmdarkgreen}{RGB}{118,139,9} % NRM "dark green"
+\setbeamercolor{structure}{fg=nrmdarkgreen}
+\setbeamercolor{page number in head/foot}{fg=white}
+
+% INNER THEME
+\defbeamertemplate*{title page}{nrm}[1][]
+{
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-3.75mm, anchor=north west]%
+  at (current page.north west)%
+  {\includegraphics[width=20mm, height=20mm, keepaspectratio]{img/logo.pdf}};
+  \tikz[remember picture,overlay]%
+  \node[inner sep=0cm, xshift=3.75mm, yshift=-22.5mm, anchor=north west]%
+  at (current page.north west)%
+  {\@extra};
+  \tikz[remember picture,overlay]%
+  \node[yshift=-3mm, inner sep=2.5mm, anchor=south]%
+  at (current page.south)%
+  {\includegraphics[width=\paperwidth]{img/titlefoot.pdf}};
+  \vskip 2mm
+  \begin{beamercolorbox}[leftskip=13mm, #1]{title}
+    \usebeamerfont{title}\inserttitle\par%
+    \ifx\insertsubtitle\@empty%
+    \else%
+    \vspace{2mm}
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+    \fi%
+  \end{beamercolorbox}\vspace{4mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{author}
+    \usebeamerfont{author}\insertauthor
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{institute}
+    \usebeamerfont{institute}\insertinstitute
+  \end{beamercolorbox}\vspace{2mm}
+  \begin{beamercolorbox}[leftskip=13mm,#1]{date}
+    \usebeamerfont{date}\insertdate
+  \end{beamercolorbox}
+}
+
+% OUTER THEME
+\defbeamertemplate*{navigation symbols}{nrm}{}
+
+\defbeamertemplate*{footline}{nrm}
+{
+  \tikz[remember picture,overlay]%
+  \node[yshift=-1pt,inner sep=0pt,anchor=south]%
+  at (current page.south)%
+  {\includegraphics[
+   width=\paperwidth,
+   height=11mm]{img/foot.pdf}
+  };
+  \vskip 0.10\paperheight
+  \hspace{15mm}%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \parbox[c][8mm][c]{0.70\paperwidth}{\@footline}
+  \hfill%
+  \insertframenumber\,/\,\inserttotalframenumber\kern10pt\vskip4pt%
+}
+
+\defbeamertemplate*{frametitle}{nrm}[1][left]
+{
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[#1,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vspace{0cm}% This aligns the colorbox at the top for some reason
+    \begin{minipage}[t][][c]{17mm}
+      \tikz \node[inner sep=0.5mm] {\includegraphics[height=14mm]{img/logo.pdf}};
+    \end{minipage}%
+    \begin{minipage}[t][][c]{0.8\paperwidth}
+      \vspace{8pt}
+      % If no subtitle, center title with logo
+      \ifx\insertframesubtitle\@empty%
+        \vspace{6pt}%
+      \fi%
+      \usebeamerfont{frametitle}%
+      \vbox{}\vskip-1ex%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+      \strut\insertframetitle\strut\par%
+      {%
+        \ifx\insertframesubtitle\@empty%
+      \else%
+        {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+        \insertframesubtitle\strut\par}%
+      \fi
+    }%
+    \vskip-1ex%
+  \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{minipage}%
+  \end{beamercolorbox}%
+}
+
+\mode
+<all>
